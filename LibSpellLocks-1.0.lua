@@ -15,13 +15,14 @@ lib.frame = lib.frame or CreateFrame("Frame")
 lib.activeSpellLocks = lib.activeSpellLocks or setmetatable({}, { __mode = "k" })
 lib.interrupts = lib.interrupts or  {}
 
-lib.data = lib.data or  {}
+-- lib.data = lib.data or  {}
 
 local f = lib.frame
 local callbacks = lib.callbacks
 local interrupts = lib.interrupts
 local activeSpellLocks = lib.activeSpellLocks
-local data = lib.data
+-- local data = lib.data
+local data = interrupts
 local CombatLogGetCurrentEventInfo = CombatLogGetCurrentEventInfo
 local UnitGUID = UnitGUID
 local UnitAura = UnitAura
@@ -32,7 +33,7 @@ f:SetScript("OnEvent", function(self, event, ...)
     return self[event](self, event, ...)
 end)
 
-local function Interrupt( id, name, duration ))
+local function Interrupt( id, name, duration )
     local opts = { duration = duration }
     if type(id) == "table" then
         for i, spellID in ipairs(id) do
@@ -68,6 +69,9 @@ if not next(interrupts) then
         Interrupt(187707, "Muzzle", 3)
         Interrupt(147362, "Counter Shot", 3)
         Interrupt(57994, "Wind Shear", 3)
+
+        -- Trial of Crusader Champions
+        -- Interrupt(65973, "Earth Shock", 3)
     else
         -------------------
         -- CLASSIC
@@ -126,13 +130,25 @@ function f:COMBAT_LOG_EVENT_UNFILTERED(event)
     
     if eventType == "SPELL_INTERRUPT" then
         local spellData = interrupts[spellID]
+        if not spellData then return end
         -- if spellData.originalID then spellID = spellData.originalID end
         local duration = spellData.duration
 
         -- local unit = maybeFindUnitByGUID(dstGUID)
         -- if unit then
         -- end
-        activeSpellLocks[dstGUID] = { spellID, duration, GetTime()+duration }
+        local oldData = activeSpellLocks[dstGUID]
+        if oldData then
+            local oldExpTime = oldData[3]
+            local newExpTime = GetTime()+duration
+            if newExpTime > oldExpTime then
+                oldData[1] = spellID
+                oldData[2] = duration
+                oldData[3] = newExpTime
+            end
+        else
+            activeSpellLocks[dstGUID] = { spellID, duration, GetTime()+duration }
+        end
 
         callbacks:Fire("UPDATE_INTERRUPT", dstGUID, spellID)
 
@@ -146,6 +162,7 @@ function lib:GetSpellLockInfo(unit)
     local guid = UnitGUID(unit)
     if activeSpellLocks[guid] then
         local spellID, duration, expirationTime = unpack(activeSpellLocks[guid])
+        if GetTime() > expirationTime then return nil end
         local name, _, icon = GetSpellInfo(spellID)
         return spellID, name, icon, duration, expirationTime
     end
