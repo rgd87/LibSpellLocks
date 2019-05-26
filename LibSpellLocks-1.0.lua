@@ -5,7 +5,7 @@ Description: Provides information about spell lock status after successful inter
 --]================]
 
 
-local MAJOR, MINOR = "LibSpellLocks-1.0", 1.4
+local MAJOR, MINOR = "LibSpellLocks-1.0", 1.0
 local lib = LibStub:NewLibrary(MAJOR, MINOR)
 if not lib then return end
 
@@ -15,13 +15,10 @@ lib.frame = lib.frame or CreateFrame("Frame")
 lib.activeSpellLocks = lib.activeSpellLocks or setmetatable({}, { __mode = "k" })
 lib.interrupts = lib.interrupts or  {}
 
--- lib.data = lib.data or  {}
-
 local f = lib.frame
 local callbacks = lib.callbacks
 local interrupts = lib.interrupts
 local activeSpellLocks = lib.activeSpellLocks
--- local data = lib.data
 local data = interrupts
 local CombatLogGetCurrentEventInfo = CombatLogGetCurrentEventInfo
 local UnitGUID = UnitGUID
