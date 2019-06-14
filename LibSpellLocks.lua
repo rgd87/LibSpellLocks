@@ -1,11 +1,11 @@
 --[================[
-LibSpellLocks-1.0 
+LibSpellLocks-1.0
 Author: d87
 Description: Provides information about spell lock status after successful interrupts
 --]================]
 
 
-local MAJOR, MINOR = "LibSpellLocks-1.0", 1.0
+local MAJOR, MINOR = "LibSpellLocks", 1.0
 local lib = LibStub:NewLibrary(MAJOR, MINOR)
 if not lib then return end
 
@@ -124,7 +124,7 @@ function f:COMBAT_LOG_EVENT_UNFILTERED(event)
     srcGUID, srcName, srcFlags, srcFlags2,
     dstGUID, dstName, dstFlags, dstFlags2,
     spellID, arg2, arg3, arg4, arg5 = CombatLogGetCurrentEventInfo()
-    
+
     if eventType == "SPELL_INTERRUPT" then
         local spellData = interrupts[spellID]
         if not spellData then return end
