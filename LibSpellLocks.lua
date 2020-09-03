@@ -12,7 +12,7 @@ if not lib then return end
 
 lib.callbacks = lib.callbacks or LibStub("CallbackHandler-1.0"):New(lib)
 lib.frame = lib.frame or CreateFrame("Frame")
-lib.activeSpellLocks = lib.activeSpellLocks or setmetatable({}, { __mode = "k" })
+lib.activeSpellLocks = lib.activeSpellLocks or setmetatable({}, { __mode = "v" })
 lib.interrupts = lib.interrupts or  {}
 
 local f = lib.frame
@@ -54,6 +54,7 @@ if not isClassic then
     Interrupt(119910, "Spell Lock", 6) -- Felhunter spell from action bar
     Interrupt(19647, "Spell Lock", 6) -- Felhunter spell from pet bar
     Interrupt(132409, "Spell Lock", 6) -- Command Demon after sacrificing Felhunter
+    Interrupt(89766, "Axe Toss", 4) -- Axe Toss (Felguard)
     Interrupt(1766, "Kick", 5)
     Interrupt(6552, "Pummel", 4)
     Interrupt(116705, "Spear Hand Strike", 4)
