@@ -5,7 +5,7 @@ Description: Provides information about spell lock status after successful inter
 --]================]
 
 
-local MAJOR, MINOR = "LibSpellLocks", 3
+local MAJOR, MINOR = "LibSpellLocks", 4
 local lib = LibStub:NewLibrary(MAJOR, MINOR)
 if not lib then return end
 
@@ -44,7 +44,7 @@ local function Interrupt( id, name, duration )
     end
 end
 
-local isClassic = select(4,GetBuildInfo()) <= 19999
+local isClassic = WOW_PROJECT_ID == WOW_PROJECT_CLASSIC
 
 if not isClassic then
     -------------------
@@ -61,7 +61,7 @@ if not isClassic then
     Interrupt(47528, "Mind Freeze", 3)
     Interrupt(2139, "Counterspell", 6)
     Interrupt(96231, "Rebuke", 4)
-    Interrupt(106839, "Skull Bash", 4)
+    Interrupt(93985, "Skull Bash", 4) -- Unlike most classes Skull bash interrupt id is different from spellbook id
     Interrupt(183752, "Disrupt", 3)
     Interrupt(187707, "Muzzle", 3)
     Interrupt(147362, "Counter Shot", 3)
