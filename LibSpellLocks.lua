@@ -5,7 +5,7 @@ Description: Provides information about spell lock status after successful inter
 --]================]
 
 
-local MAJOR, MINOR = "LibSpellLocks", 4
+local MAJOR, MINOR = "LibSpellLocks", 5
 local lib = LibStub:NewLibrary(MAJOR, MINOR)
 if not lib then return end
 
@@ -44,9 +44,7 @@ local function Interrupt( id, name, duration )
     end
 end
 
-local isClassic = WOW_PROJECT_ID == WOW_PROJECT_CLASSIC
-
-if not isClassic then
+if WOW_PROJECT_ID == WOW_PROJECT_MAINLINE then
     -------------------
     -- LIVE
     -------------------
@@ -82,7 +80,21 @@ if not isClassic then
 
     -- Trial of Crusader Champions
     -- Interrupt(65973, "Earth Shock", 3)
-else
+
+elseif WOW_PROJECT_ID == WOW_PROJECT_BURNING_CRUSADE_CLASSIC then
+    ----------------------------
+    -- BURNING CRUSADE CLASSIC
+    ----------------------------
+    Interrupt(19244, "Spell Lock", 6) -- Rank 1
+    Interrupt(19647, "Spell Lock", 8) -- Rank 2
+    Interrupt({ 8042, 8044, 8045, 8046, 10412, 10413, 10414, 25454 }, "Earth Shock", 2)
+    Interrupt(16979, "Feral Charge", 4)
+    Interrupt(2139, "Counterspell", 8)
+    Interrupt({ 1766, 1767, 1768, 1769, 38768 }, "Kick", 5)
+    Interrupt({ 6552, 6554 }, "Pummel", 4)
+    Interrupt({ 72, 1671, 1672, 29704 }, "Shield Bash", 6)
+
+elseif WOW_PROJECT_ID == WOW_PROJECT_CLASSIC then
     -------------------
     -- CLASSIC
     -------------------
