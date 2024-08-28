@@ -197,6 +197,18 @@ function f:COMBAT_LOG_EVENT_UNFILTERED(event)
     end
 end
 
+local GetSpellInfo
+if C_Spell.GetSpellInfo then
+    local C_Spell_GetSpellInfo = C_Spell.GetSpellInfo
+    GetSpellInfo = function(spellId)
+        local info = C_Spell_GetSpellInfo(spellId)
+        if info then
+            return info.name, nil, info.iconID
+        end
+    end
+else
+    GetSpellInfo = _G.GetSpellInfo
+end
 function lib:GetSpellLockInfo(unit)
     local guid = UnitGUID(unit)
     if activeSpellLocks[guid] then
